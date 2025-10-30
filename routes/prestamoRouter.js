@@ -1,7 +1,7 @@
 
-const express = require('express')
+const express = require('express')//Llamamos a express
 
-const router = express.Router()
+const router = express.Router()//Enrutador
 
 const prestamoController = require('../controllers/prestamosController')
 
