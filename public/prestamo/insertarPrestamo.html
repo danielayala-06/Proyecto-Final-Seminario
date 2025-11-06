@@ -13,7 +13,7 @@
     
     <style>
        body {
-      background-color: #c9dfeb;
+      background-color: #dad9d8;
     }
     </style>
 </head>
@@ -24,43 +24,42 @@
                 <div class="card mt-4">
                     <div class="card-header bg-primary text-white text-center">
                         <h3><i class="bi bi-cash-stack me-2"></i> Registro de Préstamo</h3>
+                        <small class="d-block">Empresa de Préstamos Los Senatinos</small>
                     </div>
                     <div class="card-body p-4 p-md-5">
-                        <form id="formPrestamo" action="insertar-prestamo" method="POST">
+                        <form id="formPrestamo" action="insertar-pago" method="POST">
 
                             <!-- Ingresar tipo de documento -->
                              <div class="mb-4">
                                 <select class="form-select mb-2" aria-label="Default select example">
-                                <option selected>Tipo de documento</option>
+                                <option selected>Tipo de documento<span class="text-danger">*</span></option>
                                 <option value="1">DNI</option>
                                 <option value="2">Carnet de Extranjería</option>
                                 <option value="3">Pasaporte</option>
                               </select>
-                              <input type="text" class="form-control" id="documento" name="documento"placeholder="DNI, CE, Pasaporte" required>
+                              <input type="text" class="form-control" id="documento" name="documento"required>
                             </div>
                             
                             <!-- Cliente -->
                             <div class="mb-4">
-                                <label for="cliente" class="form-label required">Nombre del Cliente</label>
-                                <input type="text" class="form-control" id="cliente" name="cliente" 
-                                       placeholder="Ej: Morgan Bondioli" required>
+                                <label for="cliente" class="form-label required">Nombre del Cliente<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="cliente" name="cliente" required>
                             </div>
 
-                            <!-- Monto y Tasa -->
+                            <!-- Monto-->
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <label for="monto" class="form-label required">Monto del Préstamo (S/)</label>
+                                    <label for="monto" class="form-label required">Monto del Préstamo (S/)<span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-text">S/</span>
                                         <input type="number" class="form-control" id="monto" name="monto" 
-                                               min="100" step="0.01" placeholder="5000.00" required>
+                                                required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="tasa" class="form-label required">Tasa de Interés (% anual)</label>
+                                    <label for="tasa" class="form-label required">Interés(%)<span class="text-danger">*</span></label>
                                     <div class="input-group">
-                                        <input type="number" class="form-control" id="tasa" name="tasa" 
-                                               min="0.1" max="100" step="0.01" placeholder="12.5" required>
+                                        <input type="number" class="form-control" id="interes" name="interes" required>
                                         <span class="input-group-text">%</span>
                                     </div>
                                 </div>
@@ -69,12 +68,11 @@
                             <!-- Plazo y Fecha -->
                             <div class="row mb-4">
                                 <div class="col-md-6">
-                                    <label for="plazo" class="form-label required">Plazo (meses)</label>
-                                    <input type="number" class="form-control" id="plazo" name="plazo" 
-                                           min="1" max="360" placeholder="36" required>
+                                    <label for="plazo" class="form-label required">Plazo<span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="plazo" name="plazo" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="fechaInicio" class="form-label required">Fecha de Inicio</label>
+                                    <label for="fechaInicio" class="form-label required">Fecha de Inicio<span class="text-danger">*</span></label>
                                     <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" required>
                                 </div>
                             </div>
@@ -87,27 +85,20 @@
                                 placeholder="El archivo se cargará aqui"></textarea>
                             </div>
 
-                            <!-- Botón -->
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-success btn-lg">
-                                    <i class="bi bi-check-circle me-2"></i> Registrar Préstamo
-                                </button>
-                            </div>
-                            <!-- Botón cancelar -->
-                             <div class="d-grid">
-                                <button type="reset" class="btn btn-danger btn-lg mt-4">
-                                    <i class="bi bi-x-circle me-2"></i> Cancelar
-                                </button>
-                            </div>
-                        </form>
+                            <!-- Botones -->
+                            <div class="d-flex gap-2 d-md-flex justify-content-md-end">
+                            <button type="reset" class="btn btn-danger me-md-2">
+                            <i class="bi bi-arrow-counterclockwise"></i> Limpiar
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle"></i> Registrar Prestamo
+                            </button>
+                          </div>
+                          </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    
-   
-
 </body>
 </html>
