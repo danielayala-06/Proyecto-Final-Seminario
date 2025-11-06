@@ -2,12 +2,12 @@
 const db = require("../config/db");
 
 exports.getAllPrestamos = async (req, res)=>{
-    const sql = "SELECT * FROM prestamos"
+    const sql = "SELECT * FROM prestamos ORDER BY id DESC"
 
     try {
         const [result] = await db.query(sql)
         
-        if(!result){
+        if(!result || result == 0){
             return res.status(402).json({mensaje: 'No se enontraron registros'})
         }
         return res.status(200).json(result)
@@ -18,19 +18,22 @@ exports.getAllPrestamos = async (req, res)=>{
     }
 }
 
-exports.getPrestamosByDNI = async (req, res)=>{
-    const {dni} = req.params;
+exports.getPrestamosByDocument = async (req, res)=>{
+    const {doc_identidad} = req.params;
 
-    const sql = "SELECT * FROM prestamos WHERE dni_cliente = ? "
+    const sql = `SELECT p.*, c.tipo_documento 
+    FROM clientes c 
+    LEFT JOIN prestamos p
+    ON c.id = p.cliente WHERE doc_identidad = ?;`
 
     try {
-        if(!dni){
-            return res.status(400).json({mensaje:'Inserte el DNI del usuario'})
+        if(!doc_identidad){
+            return res.status(400).json({mensaje:'Inserte el Documento de identificacion del usuario'})
         }
 
-        const [result] = await db.query(sql)
+        const [result] = await db.query(sql, [doc_identidad])
         
-        if(!result){
+        if(!result || result == 0){
             return res.status(402).json({mensaje: 'No se enontraron registros'})
         }
 
@@ -42,12 +45,72 @@ exports.getPrestamosByDNI = async (req, res)=>{
 }
 
 exports.createPrestamo = async (req, res)=>{
-    const {dni_cliente, monto, plazo, interes, fecha_inicio, estado} = req.body
-    const letra_cambio = 'uploads/file/cambio.pdf'
+    const {cliente, monto, plazo, interes, fecha_inicio} = req.body
+    const letra_cambio = 'uploads/documento/cambio.pdf'
+
+    //Calculamos la deuda inicial del prestamo
+    const deuda = parseInt(monto)  + (parseInt(monto)*parseFloat(interes))
+
+    //Validando el tipo de dato del monto y de los intereses
+    if(typeof(monto) != 'number' || typeof(interes) !='number'){
+        return res.status(400).json({mensaje: 'El monto y el interes ingresado debe ser una cantidad numerica'})
+    }
+
+    //Consulta SQL
+    const sql = "INSERT INTO prestamos(cliente, monto, plazo, interes, fecha_inicio, letra_cambio, deuda) VALUES(?, ?, ?, ?, ?, ?, ?)"
 
     try {
+        //Validaciones
+        if(!cliente || !monto || !plazo || !interes || ! fecha_inicio || !letra_cambio || !deuda){
+            return res.status(404).json({error: 'No se aceptan valores vacios'})
+        }
+
+        if(deuda<=0){
+            return res.status(400).json({mensaje: 'La deuda no puede ser menor a 0'})
+        }
+
+        const [result] = await db.query(sql, [cliente, monto, plazo, interes, fecha_inicio, letra_cambio, deuda])
         
+
+
+        if(!result || result.length == 0){
+            return res.status(402).json({mensaje: 'No se encontraron registros'})
+        }
+
+        //En caso de exito Enviar mensaje de confirmación
+        return res.status(200).json({
+            mensaje: 'Prestamos creado satisfcatoriamente',
+            id: result.insertId
+        })
+
     } catch (e) {
         console.error(e)
     }
+}
+
+exports.updatePrestamo = async(req, res)=>{
+    const {id} = req.params
+    const {cliente, monto, interes, plazo, fecha_inicio, letra_cambio} = req.params
+
+    
+
+    //Agregamos la consulta sql de forma dinamica
+
+    //Preparamos la consulta
+    const sql = `UPDATE prestamos SET WHERE id = ?;`
+    
+    try {
+        
+    } catch (e) {
+        return res.status(500).json({
+            error: e
+        })
+    }
+}
+
+exports.updatePrestamoByDocument = async(req, res)=>{
+    const {doc_identidad} = req.params
+
+    const sql = `UPDATE prestamos p JOIN clientes c ON p.cliente = c.id SET p.estado = 'pagado' WHERE c.doc_identidad = ?;`
+
 }
