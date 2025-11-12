@@ -1,301 +1,498 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Página de inicio</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome para los iconos -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">   
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sistema de Préstamos</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    :root {
+      --sidebar-width: 280px;
+      --primary-red: #e74c3c;
+      --dark-bg: #2c3e50;
+      --dark-hover: #34495e;
+      --header-blue: #3498db;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #ecf0f1;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: var(--dark-bg);
+      color: white;
+      z-index: 1000;
+      overflow-y: auto;
+      box-shadow: 3px 0 15px rgba(0,0,0,0.2);
+    }
+
+    .user-profile {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      margin-bottom: 0.8rem;
+    }
+
+    .user-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .user-role {
+      font-size: 0.85rem;
+      color: #bdc3c7;
+    }
+
+    .menu-section {
+      margin: 1rem 0;
+    }
+
+    .section-header {
+      background: var(--primary-red);
+      color: white;
+      padding: 0.9rem 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+
+    .section-header:hover {
+      background: #c0392b;
+    }
+
+    .section-header i {
+      font-size: 1.1rem;
+    }
+
+    .arrow {
+      transition: transform 0.3s ease;
+    }
+
+    .section-header.active .arrow {
+      transform: rotate(180deg);
+    }
+
+    .menu-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      background: #34495e;
+    }
+
+    .menu-content.open {
+      max-height: 500px;
+    }
+
+    .menu-item {
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      color: #ecf0f1;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+    }
+
+    .menu-item:hover {
+      background: var(--dark-hover);
+      color: white;
+      border-left-color: var(--primary-red);
+      padding-left: 1.8rem;
+    }
+
+    .menu-item i {
+      margin-right: 12px;
+      width: 20px;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-wrapper {
+      margin-left: var(--sidebar-width);
+      min-height: 100vh;
+    }
+
+    .top-bar {
+      background: white;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-desc {
+      color: #7f8c8d;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .btn-custom {
+      border-radius: 8px;
+      font-weight: 600;
+      padding: 0.6rem 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .btn-success-custom {
+      background: #27ae60;
+      border: none;
+      color: white;
+    }
+
+    .btn-danger-custom {
+      background: var(--primary-red);
+      border: none;
+      color: white;
+    }
+
+    .btn-dark-custom {
+      background: #34495e;
+      border: none;
+      color: white;
+    }
+
+    .table-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+    }
+
+    .table thead {
+      background: var(--header-blue);
+      color: white;
+    }
+
+    .table th {
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .table tbody tr {
+      transition: background 0.2s;
+    }
+
+    .table tbody tr:hover {
+      background: #f8f9fa;
+    }
+
+    .action-icon {
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 0.3rem;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .update {
+      color: #27ae60;
+    }
+
+    .update:hover {
+      background: #d5edda;
+      color: #1e7e34;
+    }
+
+    .delete {
+      color: #e74c3c;
+    }
+
+    .delete:hover {
+      background: #f8d7da;
+      color: #c82333;
+    }
+
+    .pagination .page-link {
+      color: #3498db;
+      border-radius: 6px;
+      margin: 0 3px;
+    }
+
+    .pagination .page-item.active .page-link {
+      background: #3498db;
+      border-color: #3498db;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      .main-wrapper {
+        margin-left: 0;
+      }
+      .menu-toggle {
+        display: block !important;
+      }
+    }
+
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      font-size: 1.5rem;
+      color: #2c3e50;
+      background: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      z-index: 1100;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <style>
-    /* ===== VARIABLES Y ESTILOS GENERALES ===== */
-        :root {
-            --sidebar-width: 270px;
-            --sidebar-bg: #2c3e50;
-            --sidebar-hover: rgba(255,255,255,0.1);
-        }
 
-        body {
-            background-color: #f8f9fa;
-            overflow-x: hidden;
-        }
-
-        /* ===== SIDEBAR (MENÚ LATERAL) ===== */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100vh;
-            width: var(--sidebar-width);
-            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            overflow-y: auto;
-            z-index: 1000;
-            transition: transform 0.3s ease;
-        }
-
-        /* Perfil de usuario */
-        .sidebar .profile {
-            text-align: center;
-            padding: 2rem 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .sidebar .profile-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 4px solid rgba(255,255,255,0.2);
-            margin-bottom: 1rem;
-        }
-
-        .sidebar .profile h5 {
-            margin-bottom: 0.25rem;
-            font-size: 1.1rem;
-        }
-
-        .sidebar .profile p {
-            color: #bdc3c7;
-            font-size: 0.875rem;
-        }
-
-        /* Items del menú */
-        .sidebar .nav-link {
-            color: #ecf0f1;
-            padding: 1rem 1.5rem;
-            border-left: 4px solid transparent;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .sidebar .nav-link:hover {
-            background-color: var(--sidebar-hover);
-            border-left-color: #3498db;
-            color: white;
-        }
-
-        .sidebar .nav-link.active {
-            background-color: rgba(52, 152, 219, 0.2);
-            border-left-color: #e74c3c;
-            color: white;
-        }
-
-        .sidebar .nav-link i {
-            font-size: 1.1rem;
-            width: 25px;
-        }
-  </style>
-  <!-- SIDEBAR -->
-   <div class="sidebar" id="sidebar">
-    <div class="profile">
-      <img src="/" alt=""Profile class="profile-img">
-      <h5>Agencia de Prestamos</h5>
+  <!-- ===== SIDEBAR ===== -->
+  <nav class="sidebar" id="sidebar">
+    <!-- Perfil -->
+    <div class="user-profile">
+      <img src="" alt="Usuario" class="user-avatar">
+      <div class="user-name">Prestamos altoque</div>
+      <div class="user-role"></div>
     </div>
 
-    <nav class="nav flex-column">
-      <a href="" class="nav-link active">
-          <i class="fas fa-users"></i>
-          <span>CLIENTES</span>
-      </a>
+    <!-- Menú -->
+   
 
-      <a href="" class="nav-link">
-        <i class="fas fa-file-invoice-dollar"></i>
-        <span>Préstamos</span>
-      </a>
-
-      <a href="" class="nav-link">
-        <i class="fas fa-file-invoice-dollar"></i>
-        <span>Pagos</span>
-      </a>
-    </nav>
-   </div>
-
-    <!-- CONTENIDO PRINCIPAL -->
-     <div class="main-content">
-      <!-- Barra superior con utilidades de Bootstrap -->
-        <div class="top-bar d-flex justify-content-between align-items-center">
-            <!-- Botón de menú para móvil -->
-             <i class="fas fa-bars menu-toggle" id="menu-toggle"></i>
-          <!-- Iconos parte superopr derecha -->
-          <div class="d-flex gap-3">
-            <i class="fas fa-user-plus" title="Agregar Usuario"></i>
-            <i class="fas fa-power-off text-danger" title="Cerrar Sesión"></i>
-          </div>
-        </div>
-
-          <!-- Card de encabezado usando card de Bootstrap -->
-           <div class="card header-card">
-            <div class="card-body p-4">
-              <h2 class="mb-3">
-                <i class="fas fa-clipboard-list me-2"></i>
-                Lista de Clientes
-              </h2>
-              <p>Aqui vamos a poner una pequeña descripcion para los clientes</p>
-            </div>
-           </div>
-
-           <!-- Botones de acción usando button group de Bootstrap -->
-        <div class="d-flex flex-wrap gap-3 mb-4">
-            <!-- Botón agregar cliente -->
-            <button class="btn btn-success btn-custom">
-                <i class="fas fa-plus me-2"></i>
-                AGREGAR CLIENTE
-            </button>
-
-            <!-- Botón lista (activo) -->
-            <button class="btn btn-danger btn-custom">
-                <i class="fas fa-clipboard-list me-2"></i>
-                LISTA DE CLIENTES
-            </button>
-
-            <!-- Botón buscar -->
-            <button class="btn btn-dark btn-custom" data-bs-toggle="modal" data-bs-target="#searchModal">
-                <i class="fas fa-search me-2"></i>
-                BUSCAR CLIENTE
-            </button>
-        </div>
-
-<!-- Card con tabla usando table de Bootstrap -->
-        <div class="card table-card">
-            <div class="card-body p-0">
-                <!-- Tabla responsive de Bootstrap -->
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <!-- Encabezado de la tabla -->
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>DNI</th>
-                                <th>NOMBRE</th>
-                                <th>APELLIDO</th>
-                                <th>TELÉFONO</th>
-                                <th class="text-center">ACTUALIZAR</th>
-                                <th class="text-center">ELIMINAR</th>
-                            </tr>
-                        </thead>
-
-                        <!-- Cuerpo de la tabla -->
-                        <tbody>
-                            <!-- Fila 1 -->
-                            <tr>
-                                <td class="fw-bold text-secondary">1</td>
-                                <td>012342567</td>
-                                <td>NOMBRE DEL CLIENTE</td>
-                                <td>APELLIDO DEL CLIENTE</td>
-                                <td>72349874</td>
-                                <td class="text-center">
-                                    <i class="fas fa-sync-alt action-icon update" title="Actualizar"></i>
-                                </td>
-                                <td class="text-center">
-                                    <i class="fas fa-trash-alt action-icon delete" title="Eliminar"></i>
-                                </td>
-                            </tr>
-
-                            <!-- Fila 2 -->
-                            <tr>
-                                <td class="fw-bold text-secondary">2</td>
-                                <td>012342567</td>
-                                <td>NOMBRE DEL CLIENTE</td>
-                                <td>APELLIDO DEL CLIENTE</td>
-                                <td>72349874</td>
-                                <td class="text-center">
-                                    <i class="fas fa-sync-alt action-icon update" title="Actualizar"></i>
-                                </td>
-                                <td class="text-center">
-                                    <i class="fas fa-trash-alt action-icon delete" title="Eliminar"></i>
-                                </td>
-                            </tr>
-
-                            <!-- Fila 3 -->
-                            <tr>
-                                <td class="fw-bold text-secondary">3</td>
-                                <td>012342567</td>
-                                <td>NOMBRE DEL CLIENTE</td>
-                                <td>APELLIDO DEL CLIENTE</td>
-                                <td>72349874</td>
-                                <td class="text-center">
-                                    <i class="fas fa-sync-alt action-icon update" title="Actualizar"></i>
-                                </td>
-                                <td class="text-center">
-                                    <i class="fas fa-trash-alt action-icon delete" title="Eliminar"></i>
-                                </td>
-                            </tr>
-
-                            <!-- Fila 4 -->
-                            <tr>
-                                <td class="fw-bold text-secondary">4</td>
-                                <td>012342567</td>
-                                <td>NOMBRE DEL CLIENTE</td>
-                                <td>APELLIDO DEL CLIENTE</td>
-                                <td>72349874</td>
-                                <td class="text-center">
-                                    <i class="fas fa-sync-alt action-icon update" title="Actualizar"></i>
-                                </td>
-                                <td class="text-center">
-                                    <i class="fas fa-trash-alt action-icon delete" title="Eliminar"></i>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Paginación usando pagination de Bootstrap -->
-                <div class="d-flex justify-content-center p-4">
-                    <nav>
-                        <ul class="pagination mb-0">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">Previous</span>
-                                </a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">Next</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-
-                <!-- ===== MODAL DE BÚSQUEDA (COMPONENTE BOOTSTRAP) ===== -->
-    <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Encabezado del modal -->
-                <div class="modal-header">
-                    <h5 class="modal-title" id="searchModalLabel">
-                        <i class="fas fa-search me-2"></i>Buscar Cliente
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <!-- Cuerpo del modal con formulario -->
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="searchInput" class="form-label">DNI o Nombre del Cliente</label>
-                        <input type="text" class="form-control" id="searchInput" placeholder="Ingresa el DNI o nombre...">
-                    </div>
-                </div>
-
-                <!-- Footer del modal con botones -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="btnSearch">
-                        <i class="fas fa-search me-2"></i>Buscar
-                    </button>
-                </div>
-            </div>
-        </div>
+    <div class="menu-section">
+      <div class="section-header active" onclick="toggleMenu(this)">
+        <span><i class="fas fa-users"></i> Clientes</span>
+        <i class="fas fa-chevron-down arrow"></i>
+      </div>
+      <div class="menu-content open">
+        <div class="menu-item"><i class="fas fa-plus"></i> Agregar Cliente</div>
+        <div class="menu-item"><i class="fas fa-list"></i> Lista de clientes</div>
+        <div class="menu-item"><i class="fas fa-search"></i> Buscar cliente</div>
+      </div>
     </div>
 
-     </div>
+   
+    <div class="menu-section">
+      <div class="section-header" onclick="toggleMenu(this)">
+        <span><i class="fas fa-file-invoice-dollar"></i> Préstamos</span>
+        <i class="fas fa-chevron-down arrow"></i>
+      </div>
+      <div class="menu-content">
+        <div class="menu-item"><i class="fas fa-plus"></i> Nuevo préstamo</div>
+        <div class="menu-item"><i class="fas fa-list"></i> Lista de préstamos</div>
+        <div class="menu-item"><i class="fas fa-search"></i> Buscar préstamos</div>
+        <div class="menu-item"><i class="fas fa-clock"></i> Préstamos pendientes</div>
+      </div>
+    </div>
+  </nav>
 
+  <!-- ===== MAIN WRAPPER ===== -->
+  <div class="main-wrapper">
+    <i class="fas fa-bars menu-toggle" id="menu-toggle"></i>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <h1 class="page-title">
+        <i class="fas fa-users me-2"></i> LISTA DE CLIENTES
+      </h1>
+      <p class="page-desc">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suscipit nostrum rerum animi natus beatae ex.
+      </p>
+
+      <div class="action-buttons">
+        <button class="btn btn-success-custom btn-custom">
+          <i class="fas fa-plus"></i> AGREGAR CLIENTE
+        </button>
+        <button class="btn btn-danger-custom btn-custom">
+          <i class="fas fa-clipboard-list"></i> LISTA DE CLIENTES
+        </button>
+        <button class="btn btn-dark-custom btn-custom" data-bs-toggle="modal" data-bs-target="#searchModal">
+          <i class="fas fa-search"></i> BUSCAR CLIENTE
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="container-fluid px-4">
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>DNI</th>
+                <th>NOMBRE</th>
+                <th>APELLIDO</th>
+                <th>TELÉFONO</th>
+                <th class="text-center">ACTUALIZAR</th>
+                <th class="text-center">ELIMINAR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>012342567</td>
+                <td>NOMBRE DEL CLIENTE</td>
+                <td>APELLIDO DEL CLIENTE</td>
+                <td>72349874</td>
+                <td class="text-center"><i class="fas fa-sync-alt action-icon update"></i></td>
+                <td class="text-center"><i class="fas fa-trash-alt action-icon delete"></i></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>012342567</td>
+                <td>NOMBRE DEL CLIENTE</td>
+                <td>APELLIDO DEL CLIENTE</td>
+                <td>72349874</td>
+                <td class="text-center"><i class="fas fa-sync-alt action-icon update"></i></td>
+                <td class="text-center"><i class="fas fa-trash-alt action-icon delete"></i></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>012342567</td>
+                <td>NOMBRE DEL CLIENTE</td>
+                <td>APELLIDO DEL CLIENTE</td>
+                <td>72349874</td>
+                <td class="text-center"><i class="fas fa-sync-alt action-icon update"></i></td>
+                <td class="text-center"><i class="fas fa-trash-alt action-icon delete"></i></td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>012342567</td>
+                <td>NOMBRE DEL CLIENTE</td>
+                <td>APELLIDO DEL CLIENTE</td>
+                <td>72349874</td>
+                <td class="text-center"><i class="fas fa-sync-alt action-icon update"></i></td>
+                <td class="text-center"><i class="fas fa-trash-alt action-icon delete"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex justify-content-center p-4 bg-light">
+          <nav>
+            <ul class="pagination">
+              <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+              <li class="page-item active"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Búsqueda -->
+  <div class="modal fade" id="searchModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-search me-2"></i>Buscar Cliente</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control" placeholder="DNI o Nombre del cliente...">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary">Buscar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function toggleMenu(header) {
+      const content = header.nextElementSibling;
+      const isOpen = content.classList.contains('open');
+
+      // Cerrar todos
+      document.querySelectorAll('.menu-content').forEach(menu => menu.classList.remove('open'));
+      document.querySelectorAll('.section-header').forEach(h => {
+        h.classList.remove('active');
+        h.querySelector('.arrow')?.classList.replace('fa-chevron-up', 'fa-chevron-down');
+      });
+
+      // Abrir si no estaba
+      if (!isOpen) {
+        content.classList.add('open');
+        header.classList.add('active');
+        header.querySelector('.arrow')?.classList.replace('fa-chevron-down', 'fa-chevron-up');
+      }
+    }
+
+    // Toggle sidebar móvil
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Inicializar menú Clientes abierto
+    document.addEventListener("DOMContentLoaded", () => {
+      const clientes = document.querySelectorAll('.section-header')[1];
+      if (clientes) {
+        clientes.classList.add('active');
+        clientes.nextElementSibling.classList.add('open');
+        clientes.querySelector('.arrow').classList.replace('fa-chevron-down', 'fa-chevron-up');
+      }
+    });
+  </script>
 </body>
 </html>
