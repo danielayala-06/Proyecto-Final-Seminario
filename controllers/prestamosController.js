@@ -112,5 +112,10 @@ exports.updatePrestamoByDocument = async(req, res)=>{
     const {doc_identidad} = req.params
 
     const sql = `UPDATE prestamos p JOIN clientes c ON p.cliente = c.id SET p.estado = 'pagado' WHERE c.doc_identidad = ?;`
+    try {
+        
+    } catch (e) {
+        return res.status(500).json({error: e})
+    }
 
 }
