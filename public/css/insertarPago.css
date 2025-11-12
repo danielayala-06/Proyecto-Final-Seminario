@@ -1,0 +1,27 @@
+ body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .form-label {
+      font-weight: 500;
+    }
+    #vistaPrevia {
+      display: none;
+      margin-top: 15px;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      padding: 10px;
+      background-color: #fff;
+    }
+    #imgPrevia {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .file-name {
+      font-size: 0.9rem;
+      color: #6c757d;
+      margin-top: 10px;
+    }
