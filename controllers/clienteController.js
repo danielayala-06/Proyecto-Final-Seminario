@@ -15,6 +15,24 @@ exports.getAllClientes = async (req, res)=>{
     }   
 }
 
+exports.getClienteByDocumento = async (req, res)=>{
+    const {doc_identidad} = req.params
+    const sql = "SELECT * FROM clientes WHERE doc_identidad like ? ORDER BY nombres DESC"
+    try {
+        if(!doc_identidad){
+            return res.status(400).json({error: 'No se aceptan valores vacios'})
+        }
+        const [result] = await db.query(sql, [`${doc_identidad}%`])
+        if(!result || result.length == 0){
+            return res.status(404).json({mensaje: 'No se encontraron registros'})
+        }   
+        return res.status(200).json(result)
+    }catch (e) {
+        console.error(e)
+        return res.status(500).json({error: e})
+    }   
+}
+
 exports.createCliente = async (req, res)=>{
     const {tipo_documento, doc_identidad, nombres, apellidos, direccion, genero, telefono} = req.body   
     const sql = "INSERT INTO clientes(tipo_documento, doc_identidad, nombres, apellidos, direccion, genero, telefono) VALUES(?, ?, ?, ?, ?, ?, ?)"
@@ -55,8 +73,6 @@ exports.updateCliente = async (req, res)=>{
     }
 
     //Algoritmo eficiente de actualización
-    //NO SE HARÁ => UPDATE productos SET descripcion = ?, garantia = ?, precio = ? WHERE id = ?
-    //SE DESARROLLARÁ => UPDATE productos SET precio = ? WHERE id = ?
     let sqlVars = {tipo_documento, doc_identidad, nombres, apellidos, direccion, genero, telefono}; //campos que sufrirán actualización
     let sqlParts = [];
     let values = []; //valores para los campos

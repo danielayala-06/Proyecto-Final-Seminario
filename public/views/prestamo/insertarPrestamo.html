@@ -35,10 +35,13 @@
                               <input type="text" class="form-control" id="documento" name="documento"required>
                             </div>
                             
+
+
                             <!-- Cliente -->
                             <div class="mb-4">
                                 <label for="cliente" class="form-label required">Nombre del Cliente<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="cliente" name="cliente" required>
+                                <input type="text" class="form-control" id="id-cliente" name="cliente" disabled hidden aria-hidden="true" required>
+                                <label for="" id="cliente" class="form-control"> - - - </label>
                             </div>
 
                             <!-- Monto-->
@@ -95,5 +98,73 @@
             </div>
         </div>
     </div>
+
+<script>
+    const API_URL_CLIENTES = 'http://localhost:3000/api/clientes'
+    const API_URL_PRESTAMOS = 'http://localhost:3000/api/prestamos'
+    const formCliente = document.getElementById("formPrestamo")
+    const inputDocumento = document.getElementById("documento")
+    let inputCliente = document.querySelector("#cliente") // Input cliene
+
+    let idCliente = document.getElementById("id-cliente") //id cliente
+    let monto = document.getElementById("id-monto")
+    let interes = document.getElementById("interess")
+    let plazo = document.getElementById("id-cliente")
+    let fechaInicio = document.getElementById("id-cliente")
+    let letraCambio = document.getElementById("id-cliente")
+    
+    /* Obtenemos clientes */
+    async function fetchClientes(){
+        try {
+            const response = await fetch(`${API_URL_CLIENTES}/${inputDocumento.value}`)
+            const clientes = await response.json()
+            return clientes[0]
+        } catch (e) {
+            return {nombres: 'No encontrado', id: null}
+        }
+    }
+
+    async function createPrestamo(prestamosData) {
+        try {
+            const response = await fetch(API_URL_PRESTAMOS, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(prestamosData),
+          });
+
+          const prestamo = await response.json()
+          return prestamo
+        } catch (e) {
+            console.error(e)
+            return  e
+        }
+    }
+
+
+    /* Para el autocompletado de clientes */
+    inputDocumento.addEventListener("keyup", async()=>{
+        const cliente = await fetchClientes()
+        inputCliente.innerHTML = cliente.nombres;
+        idCliente.value = cliente.id;
+        //console.log(cliente.id)
+        //console.log(idCliente.value)
+    })
+
+    /* Creacion de prestamos */
+    formCliente.addEventListener("submit", (e)=>{
+        e.preventDefault()
+        let newPrestamo = {}
+
+
+        idCliente = idCliente.value
+        prestamos = prestamo.value
+
+    } )
+
+
+</script>
+
 </body>
 </html>

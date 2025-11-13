@@ -69,15 +69,16 @@
         <a href="clientes/crear" class="btn btn-success-custom btn-custom" id="btn-agregar">
           <i class="fas fa-plus"></i> AGREGAR CLIENTE
         </a>
-        <button class="btn btn-danger-custom btn-custom" id="btn-listar">
+        <a href="/" class="btn btn-danger-custom btn-custom" id="btn-listar">
           <i class="fas fa-clipboard-list"></i> LISTA DE CLIENTES
-        </button>
+        </a>
         <button class="btn btn-dark-custom btn-custom" data-bs-toggle="modal" data-bs-target="#searchModal">
           <i class="fas fa-search"></i> BUSCAR CLIENTE
         </button>
       </div>
     </div>
 
+    <section id="tablas"></section>
     <!-- Tabla -->
     <div class="container-fluid px-4">
       <div class="table-card">
@@ -159,13 +160,15 @@
           <h5 class="modal-title"><i class="fas fa-search me-2"></i>Buscar Cliente</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body">
-          <input type="text" class="form-control" placeholder="DNI o Nombre del cliente...">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary">Buscar</button>
-        </div>
+        <form action="" method="get" id="formClienteDoc">
+          <div class="modal-body">
+            <input type="text" class="form-control" placeholder="DNI o Nombre del cliente...">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Buscar</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
