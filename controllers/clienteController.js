@@ -5,7 +5,7 @@ exports.getAllClientes = async (req, res)=>{
     try {
         const [result] = await db.query(sql)
 
-        if(!result || result == 0){
+        if(result.length === 0 ){
             return res.status(402).json({mensaje: 'No se enontraron registros'})
         }   
         return res.status(200).json(result)
