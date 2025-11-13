@@ -1,0 +1,5 @@
+DB_HOST=dbclientes-danielayalaromo8-6821.i.aivencloud.com
+DB_USER=avnadmin
+DB_PASSWORD=AVNS_fVO71jVtfEzMr_Ub09y
+DB_DATABASE=prestamos_pymes
+DB_PORT=20813
