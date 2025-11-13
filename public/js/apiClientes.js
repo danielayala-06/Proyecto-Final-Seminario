@@ -11,7 +11,7 @@ async function fetchClientes() {
     }   
 }
 /* Funcion para crear clientes */
-async function createCliente(clienteData) {
+/* async function createCliente(clienteData) {
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
@@ -28,7 +28,7 @@ async function createCliente(clienteData) {
         return error;
     }  
 }
-
+ */
 /* Funcion para mostrar clientes. */
 async function displayClientes() {
     const clientes = await fetchClientes();
@@ -81,29 +81,7 @@ function attachEventListeners() {
             }
         });
     });
-
-    document.getElementById('formCliente').addEventListener('submit', async (e) => {
-        e.preventDefault(); 
-        let newCliente = {};//Creamos un objeto vacio para el nuevo cliente
-        newCliente['tipo_documento'] = document.getElementById('tipo_documento').value;
-        newCliente['doc_identidad'] = document.getElementById('doc_identidad').value;
-        newCliente['nombres'] = document.getElementById('nombres').value;
-        newCliente['apellidos'] = document.getElementById('apellidos').value;
-        newCliente['direccion'] = document.getElementById('direccion').value;
-        newCliente['telefono'] = document.getElementById('telefono').value;
-
-        const createdCliente = await createCliente(newCliente);
-        if (createdCliente && createdCliente.id) {
-            alert('Cliente creado con éxito con ID: ' + createdCliente.id);
-            document.getElementById('formCliente').reset();
-            displayClientes(); 
-        } else {
-            alert('Error al crear el cliente.');
-        }
-    });
 };
-
-
 
 document.addEventListener('DOMContentLoaded', () => {
     displayClientes();

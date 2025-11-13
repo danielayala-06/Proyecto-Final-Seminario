@@ -4,7 +4,7 @@ const express = require('express')
 const cors = require('cors') //Permisos sobre el contenido a desplegar
 const path = require('path') //Express servir el frontend
 
-const fs = require('fs').promises //Actualizado para la gestión de archivos
+//const fs = require('fs').promises //Actualizado para la gestión de archivos
 
 //Obtenemos los routers
 const prestamoRouter = require('./routes/prestamoRouter')
@@ -36,8 +36,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'views/index.html'))//root
 })
 //Módulos del sistema (archivos HTML en public)
-app.get('/clientes', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'views/cliente/clientes.html'))
+app.get('/clientes/crear', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'views/cliente/crearCliente.html'))
 })
 
 app.get('/productos', (req, res) => {
