@@ -36,12 +36,12 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'views/index.html'))//root
 })
 //Módulos del sistema (archivos HTML en public)
-app.get('/clientes', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'views/cliente/clientes.html'))
+app.get('/clientes/crear', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'views/cliente/crearCliente.html'))
 })
 
-app.get('/productos', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'productos.html'))
+app.get('/pagos/crear', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'views/pagos/insertarPagos.html'))
 })
 
 app.get('/tiendas', (req, res) => {
