@@ -7,11 +7,11 @@ async function fetchClientes() {
         return clientes;
     } catch (error) {
         console.error('Error fetching clientes:', error);
-        return [];
+        return;
     }   
 }
 /* Funcion para crear clientes */
-/* async function createCliente(clienteData) {
+async function createCliente(clienteData) {
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
@@ -25,10 +25,10 @@ async function fetchClientes() {
         return newCliente;
     } catch (error) {
         console.error('Error al crear el cliente:', error);
-        return error;
+        return;
     }  
 }
- */
+ 
 /* Funcion para mostrar clientes. */
 async function displayClientes() {
     const clientes = await fetchClientes();

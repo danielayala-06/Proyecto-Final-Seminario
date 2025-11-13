@@ -186,6 +186,23 @@ exports.updatePrestamo = async (req, res) => {
   
 };
 
+exports.deletePrestamo = async(req, res) =>{
+  const {id} = req.params
+  const SQL = `UPDATE prestamos SET estado = '0' WHERE id = ? `
+  try {
+    const [result] = await db.query(SQL, [id])
+
+    if(result.affectedRows === 0){
+      return res.status(404).json({mensaje: 'No se logro actualizar el registro'})
+    }
+    
+    return res.status(200).json({mensaje: `se elimino el registro: ${result.affectedRows}`})
+
+  } catch (e) {
+    return res.status(500).json({error: e})
+  }
+}
+
 /* exports.updatePrestamoByDocument = async (req, res) => {
   const { doc_identidad } = req.params;
 

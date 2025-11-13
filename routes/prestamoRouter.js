@@ -8,5 +8,6 @@ router.get('/', prestamoController.getAllPrestamos)
 router.get('/:doc_identidad', prestamoController.getPrestamosByDocument)
 router.post('/', prestamoController.createPrestamo)
 router.put('/:id', prestamoController.updatePrestamo)
+router.delete('/:id', prestamoController.deletePrestamo)
 
 module.exports = router

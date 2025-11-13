@@ -15,6 +15,21 @@ exports.getAllClientes = async (req, res)=>{
     }   
 }
 
+exports.getClienteByDoc = async (req, res)=>{
+    const {doc} = req.params
+    const SQL = 'SELECT * FROM clientes WHERE doc_identidad LIKE ?'
+    try {
+        const [clientes] = await db.query(SQL, [`${doc}%`])
+        if(!clientes || clientes.length === 0){
+            return res.status(404).json({mensaje: "No se encontraron clientes"})
+        }
+
+        return res.status(290).json(clientes)
+    } catch (e) {
+        return res.status(500).json({error: e})
+    }
+}
+
 exports.createCliente = async (req, res)=>{
     const {tipo_documento, doc_identidad, nombres, apellidos, direccion, genero, telefono} = req.body   
     const sql = "INSERT INTO clientes(tipo_documento, doc_identidad, nombres, apellidos, direccion, genero, telefono) VALUES(?, ?, ?, ?, ?, ?, ?)"

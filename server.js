@@ -40,12 +40,12 @@ app.get('/clientes/crear', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'views/cliente/crearCliente.html'))
 })
 
-app.get('/productos', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'productos.html'))
+app.get('/pagos/crear', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'views/pagos/insertarPago.html'))
 })
 
-app.get('/tiendas', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'tiendas.html'))
+app.get('/prestamos/crear', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'views/prestamo/insertarPrestamo.html'))
 })
 
 //Rutas para las API's
