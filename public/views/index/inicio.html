@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sistema de Préstamos</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    :root {
+      --sidebar-width: 280px;
+      --primary-red: #e74c3c;
+      --dark-bg: #2c3e50;
+      --dark-hover: #34495e;
+      --header-blue: #3498db;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #ecf0f1;
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: var(--sidebar-width);
+      height: 100vh;
+      background: var(--dark-bg);
+      color: white;
+      z-index: 1000;
+      overflow-y: auto;
+      box-shadow: 3px 0 15px rgba(0,0,0,0.2);
+    }
+
+    .user-profile {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      margin-bottom: 0.8rem;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--dark-bg);
+    }
+
+    .user-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .user-role {
+      font-size: 0.85rem;
+      color: #bdc3c7;
+    }
+
+    .menu-section {
+      margin: 1rem 0;
+    }
+
+    .section-header {
+      background: var(--primary-red);
+      color: white;
+      padding: 0.9rem 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+
+    .section-header:hover {
+      background: #c0392b;
+    }
+
+    .section-header i {
+      font-size: 1.1rem;
+    }
+
+    .arrow {
+      transition: transform 0.3s ease;
+    }
+
+    .section-header.active .arrow {
+      transform: rotate(180deg);
+    }
+
+    .menu-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      background: #34495e;
+    }
+
+    .menu-content.open {
+      max-height: 500px;
+    }
+
+    .menu-item {
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      color: #ecf0f1;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+    }
+
+    .menu-item:hover {
+      background: var(--dark-hover);
+      color: white;
+      border-left-color: var(--primary-red);
+      padding-left: 1.8rem;
+    }
+
+    .menu-item i {
+      margin-right: 12px;
+      width: 20px;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-wrapper {
+      margin-left: var(--sidebar-width);
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+    }
+
+    .top-bar {
+      background: white;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-desc {
+      color: #7f8c8d;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ===== DASHBOARD CARDS (CENTRADAS) ===== */
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      padding: 2rem 1rem;
+    }
+
+    .stats-card {
+      background: white;
+      border-radius: 12px;
+      width: 180px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    .stats-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stats-icon {
+      font-size: 2.5rem;
+      color: var(--dark-bg);
+      margin-bottom: 0.8rem;
+    }
+
+    .stats-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+
+    .stats-label {
+      color: #7f8c8d;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.3rem;
+    }
+
+    .stats-small {
+      font-size: 0.8rem;
+      color: #95a5a6;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      .main-wrapper {
+        margin-left: 0;
+      }
+      .menu-toggle {
+        display: block !important;
+      }
+    }
+
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      font-size: 1.5rem;
+      color: #2c3e50;
+      background: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      z-index: 1100;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== SIDEBAR ===== -->
+  <nav class="sidebar" id="sidebar">
+    <!-- Perfil -->
+    <div class="user-profile">
+      <div class="user-avatar"><i class="fas fa-user"></i></div>
+      <div class="user-name">Prestamos altoque</div>
+      <div class="user-role">Administrador</div>
+    </div>
+
+    <!-- Menú -->
+    <div class="menu-section">
+      
+      <div class="menu-content open">
+        <div class="menu-item active"><i class="fas fa-home"></i> Inicio</div>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <div class="section-header" onclick="toggleMenu(this)">
+        <span><i class="fas fa-users"></i> Clientes</span>
+        <i class="fas fa-chevron-down arrow"></i>
+      </div>
+      <div class="menu-content">
+        <div class="menu-item"><i class="fas fa-plus"></i> Agregar Cliente</div>
+        <div class="menu-item"><i class="fas fa-list"></i> Lista de clientes</div>
+        <div class="menu-item"><i class="fas fa-search"></i> Buscar cliente</div>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <div class="section-header" onclick="toggleMenu(this)">
+        <span><i class="fas fa-file-invoice-dollar"></i> Préstamos</span>
+        <i class="fas fa-chevron-down arrow"></i>
+      </div>
+      <div class="menu-content">
+        <div class="menu-item"><i class="fas fa-plus"></i> Nuevo préstamo</div>
+        <div class="menu-item"><i class="fas fa-list"></i> Lista de préstamos</div>
+        <div class="menu-item"><i class="fas fa-search"></i> Buscar préstamos</div>
+        <div class="menu-item"><i class="fas fa-clock"></i> Préstamos pendientes</div>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <div class="section-header" onclick="toggleMenu(this)">
+        <span><i class="fas fa-file-invoice-dollar"></i> Pagos</span>
+        <i class="fas fa-chevron-down arrow"></i>
+      </div>
+      <div class="menu-content">
+        <div class="menu-item"><i class="fas fa-plus"></i> Nuevo pago</div>
+        <div class="menu-item"><i class="fas fa-list"></i> Lista de pagos</div>
+        <div class="menu-item"><i class="fas fa-search"></i> Buscar pagos</div>
+        
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== MAIN WRAPPER ===== -->
+  <div class="main-wrapper">
+    <i class="fas fa-bars menu-toggle" id="menu-toggle"></i>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <h1 class="page-title">
+        <i class="fas fa-tachometer-alt me-2"></i> Página de inicio
+      </h1>
+      <p class="page-desc">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suscipit nostrum rerum animi natus beatae ex. Culpa blanditiis tempore amet alias placeat, obcaecati quaerat ullam, sunt est, odio aut veniam ratione.
+      </p>
+    </div>
+
+    <!-- Dashboard Cards  -->
+    <div class="stats-container">
+      <div class="stats-card">
+        <div class="stats-label">CLIENTES</div>
+        <div class="stats-icon"><i class="fas fa-users"></i></div>
+        <div class="stats-number">5</div>
+        <div class="stats-small">5 Registrados</div>
+      </div>
+
+      
+
+      <div class="stats-card">
+        <div class="stats-label">PRESTAMOS</div>
+        <div class="stats-icon"><i class="fas fa-hand-holding-usd"></i></div>
+        <div class="stats-number">10</div>
+        <div class="stats-small">10 Registrados</div>
+      </div>
+
+      <div class="stats-card">
+        <div class="stats-label">PAGOS</div>
+        <div class="stats-icon"><i class="fa-solid fa-money-check-dollar"></i></div>
+        <div class="stats-number">50</div>
+        <div class="stats-small">50 pagos registrados</div>
+      </div>
+
+    
+    </div>
+  </div>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="/Proyecto-Final-Seminario/public/js/index.js"></script>
+</body>
+</html>
