@@ -9,7 +9,7 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"/>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="../../css/index.css">
+  <link rel="stylesheet" href= "../../css/index.css">
 </head>
 <body>
 
@@ -23,15 +23,13 @@
     </div>
 
     <!-- Menú -->
-   
-
     <div class="menu-section">
       <div class="section-header active" onclick="toggleMenu(this)">
         <span><i class="fas fa-users"></i> Clientes</span>
         <i class="fas fa-chevron-down arrow"></i>
       </div>
       <div class="menu-content open">
-        <div class="menu-item"><i class="fas fa-plus"></i> Agregar Cliente</div>
+        <a href="/clientes/crear" class="menu-item btn"><i class="fas fa-plus"></i> Agregar Cliente</a>
         <div class="menu-item"><i class="fas fa-list"></i> Lista de clientes</div>
         <div class="menu-item"><i class="fas fa-search"></i> Buscar cliente</div>
       </div>
@@ -50,19 +48,6 @@
         <div class="menu-item"><i class="fas fa-clock"></i> Préstamos pendientes</div>
       </div>
     </div>
-
-    <div class="menu-section">
-      <div class="section-header" onclick="toggleMenu(this)">
-        <span><i class="fas fa-file-invoice-dollar"></i> Pagos</span>
-        <i class="fas fa-chevron-down arrow"></i>
-      </div>
-      <div class="menu-content">
-        <div class="menu-item"><i class="fas fa-plus"></i> Nuevo pago</div>
-        <div class="menu-item"><i class="fas fa-list"></i> Lista de pagos</div>
-        <div class="menu-item"><i class="fas fa-search"></i> Buscar pagos</div>
-        
-      </div>
-    </div>
   </nav>
 
   <!-- ===== MAIN WRAPPER ===== -->
@@ -71,6 +56,7 @@
 
     <!-- Top Bar -->
     <div class="top-bar">
+      <!-- Titulo de la pagina -->
       <h1 class="page-title">
         <i class="fas fa-users me-2"></i> LISTA DE CLIENTES
       </h1>
@@ -79,32 +65,34 @@
       </p>
 
       <div class="action-buttons">
-        <button class="btn btn-success-custom btn-custom">
+        <a href="clientes/crear" class="btn btn-success-custom btn-custom" id="btn-agregar">
           <i class="fas fa-plus"></i> AGREGAR CLIENTE
-        </button>
-        <button class="btn btn-danger-custom btn-custom">
+        </a>
+        <a href="/" class="btn btn-danger-custom btn-custom" id="btn-listar">
           <i class="fas fa-clipboard-list"></i> LISTA DE CLIENTES
-        </button>
+        </a>
         <button class="btn btn-dark-custom btn-custom" data-bs-toggle="modal" data-bs-target="#searchModal">
           <i class="fas fa-search"></i> BUSCAR CLIENTE
         </button>
       </div>
     </div>
 
+    <section id="tablas"></section>
     <!-- Tabla -->
     <div class="container-fluid px-4">
       <div class="table-card">
         <div class="table-responsive">
-          <table class="table table-hover mb-0">
+          <table class="table table-hover mb-0" id="tabla-clientes">
             <thead>
               <tr>
                 <th>#</th>
-                <th>DNI</th>
-                <th>NOMBRE</th>
-                <th>APELLIDO</th>
-                <th>TELÉFONO</th>
-                <th class="text-center">ACTUALIZAR</th>
-                <th class="text-center">ELIMINAR</th>
+                <th>Documento</th>
+                <th>N° Documento</th>
+                <th>nombres</th>
+                <th>apellidos</th>
+                <th>direccion</th>
+                <th>telefono</th>
+                <th class="text-center">Opciones</th>
               </tr>
             </thead>
             <tbody>
@@ -114,7 +102,7 @@
                 <td>NOMBRE DEL CLIENTE</td>
                 <td>APELLIDO DEL CLIENTE</td>
                 <td>72349874</td>
-                <td class="text-center"><i class="fa-solid fa-pen-to-square"></i></td>
+                <td class="text-center"><i class="fas fa-sync-alt action-icon update"></i></td>
                 <td class="text-center"><i class="fas fa-trash-alt action-icon delete"></i></td>
               </tr>
               <tr>
@@ -123,7 +111,7 @@
                 <td>NOMBRE DEL CLIENTE</td>
                 <td>APELLIDO DEL CLIENTE</td>
                 <td>72349874</td>
-                <td class="text-center"><i class="fa-solid fa-pen-to-square"></i></td>
+                <td class="text-center"><i class="fas fa-sync-alt action-icon update"></i></td>
                 <td class="text-center"><i class="fas fa-trash-alt action-icon delete"></i></td>
               </tr>
               <tr>
@@ -132,7 +120,7 @@
                 <td>NOMBRE DEL CLIENTE</td>
                 <td>APELLIDO DEL CLIENTE</td>
                 <td>72349874</td>
-                <td class="text-center"><i class="fa-solid fa-pen-to-square"></i></td>
+                <td class="text-center"><i class="fas fa-sync-alt action-icon update"></i></td>
                 <td class="text-center"><i class="fas fa-trash-alt action-icon delete"></i></td>
               </tr>
               <tr>
@@ -141,7 +129,7 @@
                 <td>NOMBRE DEL CLIENTE</td>
                 <td>APELLIDO DEL CLIENTE</td>
                 <td>72349874</td>
-                <td class="text-center"><i class="fa-solid fa-pen-to-square"></i></td>
+                <td class="text-center"><i class="fas fa-sync-alt action-icon update"></i></td>
                 <td class="text-center"><i class="fas fa-trash-alt action-icon delete"></i></td>
               </tr>
             </tbody>
@@ -171,19 +159,72 @@
           <h5 class="modal-title"><i class="fas fa-search me-2"></i>Buscar Cliente</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <div class="modal-body">
-          <input type="text" class="form-control" placeholder="DNI o Nombre del cliente...">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary">Buscar</button>
-        </div>
+        <form action="" method="get" id="formClienteDoc">
+          <div class="modal-body">
+            <input type="text" class="form-control" placeholder="DNI o Nombre del cliente...">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Buscar</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 
   <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-  <script src="/Proyecto-Final-Seminario/public/js/index.js"></script>
+  <script>
+    function toggleMenu(header) {
+      const content = header.nextElementSibling;
+      const isOpen = content.classList.contains('open');
+
+      // Cerrar todos
+      document.querySelectorAll('.menu-content').forEach(menu => menu.classList.remove('open'));
+      document.querySelectorAll('.section-header').forEach(h => {
+        h.classList.remove('active');
+        h.querySelector('.arrow')?.classList.replace('fa-chevron-up', 'fa-chevron-down');
+      });
+
+      // Abrir si no estaba
+      if (!isOpen) {
+        content.classList.add('open');
+        header.classList.add('active');
+        header.querySelector('.arrow')?.classList.replace('fa-chevron-down', 'fa-chevron-up');
+      }
+    }
+
+    //Funcion para redirigir a las diferentes acciones de la vista
+    function eventsButtonsOptionsView(){
+      const btnListar = document.getElementById('btn-listar');
+      const btnAgregar = document.getElementById('btn-agregar');
+      btnListar.addEventListener('click', () => {
+        window.location.href = 'index.html';
+      });
+      btnAgregar.addEventListener('click', () => {
+        window.location.href = '../views/cliente/crearCliente.html';
+      });
+    }
+
+    // Toggle sidebar móvil
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('active');
+    });
+
+    // Inicializar menú Clientes abierto
+    document.addEventListener("DOMContentLoaded", () => {
+      const clientes = document.querySelectorAll('.section-header')[1];
+      if (clientes) {
+        clientes.classList.add('active');
+        clientes.nextElementSibling.classList.add('open');
+        clientes.querySelector('.arrow').classList.replace('fa-chevron-down', 'fa-chevron-up');
+      }
+      
+      // Eventos botones navegacion vista
+      eventsButtonsOptionsView();
+    });
+  </script>
+  <!-- Funcionalidad API's -->
+  <script src="../js/apiClientes.js"></script>
 </body>
-</html> 
+</html>

@@ -107,82 +107,55 @@ exports.createPrestamo = async (req, res) => {
 };
 
 exports.updatePrestamo = async (req, res) => {
-  //Obtenemos el Id del prestamo
   const { id } = req.params;
 
-  //Leer un JSON body
-  const {
-    cliente,
-    monto,
-    intereses,
-    plazo,
-    fecha_inicio,
-    letra_cambio,
-    estado,
-  } = req.body;
+  const {cliente,monto,intereses,plazo,fecha_inicio,letra_cambio,estado} = req.body;
 
-  //Validación => ES OBLIGATORIO QUE AL MENOS UNO TENGA DATOS
-  if (
-    !cliente &&
-    !monto &&
-    !intereses &&
-    !plazo &&
-    !fecha_inicio &&
-    !letra_cambio &&
-    !estado
-  ) {
-    return res.status(400).json({
-      mensaje:
-        "Para actualizar debe de ingresar el campo con el valor a actualizar",
-    });
+  //En caso de que no haya datos para actualizar
+  if (!cliente &&!monto &&!intereses &&!plazo &&!fecha_inicio &&!letra_cambio &&!estado) {
+    return res.status(400).json({mensaje:"Para actualizar debe de ingresar el campo con el valor a actualizar",});
   }
 
   //Algoritmo eficiente de actualización
-  //NO SE HARÁ => UPDATE productos SET descripcion = ?, garantia = ?, precio = ? WHERE id = ?
-  //SE DESARROLLARÁ => UPDATE productos SET precio = ? WHERE id = ?
-  let sqlVars = {
-    cliente,
-    monto,
-    intereses,
-    plazo,
-    fecha_inicio,
-    letra_cambio,
-    estado,
-  }; //campos que sufrirán actualización
+  let sqlVars = {cliente,monto,intereses,plazo,fecha_inicio,letra_cambio,estado}; //campos que sufrirán actualización
   let sqlParts = [];
   let values = []; //valores para los campos
 
-  //Obtenemos las valores que se encuentran en el body
-    Object.keys(sqlVars).map((key) => {
-        if (!sqlVars[key]) {
-            return;
-        }
-        sqlParts.push(`${key} = ?`); //Agregamos la clave a la consulta
-        values.push(sqlVars[key]); //Agregamos el valor al query
-        console.log(key);
-        console.log(sqlVars[key]);
-    });
-    
-    // En caso de que no haya campos para actualizar
-    if (sqlParts.length == 0) {
-      return res.status(400).json({ mensaje: "No hay datos por actualizar" });
-    }
+  //Obtenemos las claves que se encuentra en el objeto values
+  Object.keys(sqlVars).map((key) => {
+      if (!sqlVars[key]) {
+          return;
+      }
+      sqlParts.push(`${key} = ?`); //Agregamos la clave a la consulta
+      values.push(sqlVars[key]); //Agregamos el valor al query
+      console.log(key);
+      console.log(sqlVars[key]);
+  });
+  
+  // En caso de que no haya campos para actualizar
+  if (sqlParts.length === 0) {
+    return res.status(400).json({ mensaje: "No hay datos por actualizar" });
+  }
 
-    // Construimos la consulta de manera dinámica
-    values.push(id);
-    const sql = `UPDATE prestamos SET ${sqlParts.join(", ")} WHERE id = ?`;
-    try {
-        const [result] = await db.query(sql, values);
+  values.push(id);//Agregamos el id del cliente
 
-        /* Mensajes de errores */
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ mensaje: `No encontramos el prestamo con el ID ${id}` });
-        }
-        res.status(200).json({ mensaje: "Actualizado correctamente" });
+  // Construimos la consulta de manera dinámica
+  const sql = `UPDATE prestamos SET ${sqlParts.join(", ")} WHERE id = ?`;
+
+  try {
+      const [result] = await db.query(sql, values);
+
+      /* No haya registros afectados */
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ mensaje: `No encontramos el prestamo con el ID ${id}` });
+      }
+      /* Mensaje de exito */
+      res.status(200).json({ mensaje: "Actualizado correctamente" });
+      
     } catch (e) {
-        console.error(e);
-        res.status(500).json({ mensaje: "Error interno en el servidor" });
-    } 
+      console.error(e);
+      res.status(500).json({ mensaje: "Error interno en el servidor" });
+  } 
   
 };
 

@@ -6,9 +6,10 @@ exports.getAllPagos = async (req, res)=>{
     try {
         const [result] = await db.query(sql)
         
-        if(!result || result == 0){
+        if(result.length === 0){
             return res.status(402).json({mensaje: 'No se enontraron registros'})
         }
+
         return res.status(200).json(result)
 
     } catch (e) {
@@ -16,23 +17,21 @@ exports.getAllPagos = async (req, res)=>{
         return res.status(500).json({error: e})
     }
 }
+
 exports.createPrestamo = async (req, res)=>{
     const {id_prestamo, monto_amortizado, fecha_pago, saldo_pendiente, metodo_pago, comprobante_pago} = req.body
 
     const sql = "INSERT INTO pagos(id_prestamo, monto_amortizado, fecha_pago, saldo_pendiente, metodo_pago, comprobante_pago) VALUES(?, ?, ?, ?, ?, ?)" 
-    //Calculamos la deuda inicial del prestamo
-    //const deuda = parseInt(monto) + parseInt(monto) * parseFloat(interes)
-    //Validando el tipo de dato del monto y de los intereses
 
     try {
-        //Validaciones
+        // Validacion en caso de valor nulo
         if(!id_prestamo || !monto_amortizado || !fecha_pago || !saldo_pendiente || !metodo_pago || !comprobante_pago){
             return res.status(404).json({error: 'No se aceptan valores vacios'})
         }
        
         const [result] = await db.query(sql, [cliente, monto, plazo, interes, fecha_inicio, letra_cambio, deuda])
         
-        if(!result || result.length == 0){
+        if(result.length === 0){
             return res.status(402).json({mensaje: 'No se logro insertar el pago registros'})
         }
 
@@ -44,6 +43,7 @@ exports.createPrestamo = async (req, res)=>{
 
     } catch (e) {
         console.error(e)
+        return res.status(500).json({error: e})
     }
 }
 
@@ -51,18 +51,15 @@ exports.updatePago = async(req, res)=>{
     const {id} = req.params
     const {id_prestamo, monto_amortizado, fecha_pago, saldo_pendiente, metodo_pago, comprobante_pago} = req.body
 
-     //Validación => ES OBLIGATORIO QUE AL MENOS UNO TENGA DATOS
     if ( !id_prestamo && !monto_amortizado && !fecha_pago && !saldo_pendiente && !metodo_pago && !comprobante_pago) {
         return res.status(400).json({
             mensaje:"Para actualizar debe de ingresar el campo con el valor a actualizar",
         });
     }
 
-    //Algoritmo eficiente de actualización
-    //NO SE HARÁ => UPDATE productos SET descripcion = ?, garantia = ?, precio = ? WHERE id = ?
-    //SE DESARROLLARÁ => UPDATE productos SET precio = ? WHERE id = ?
-    let sqlVars = {id_prestamo, monto_amortizado, fecha_pago, saldo_pendiente, metodo_pago, comprobante_pago}; //campos que sufrirán actualización
-    let sqlParts = [];
+    //Algoritmo para la actualizacion
+    let sqlVars = {id_prestamo, monto_amortizado, fecha_pago, saldo_pendiente, metodo_pago, comprobante_pago};
+    let sqlParts = []; // campos(sql segmentado)
     let values = []; //valores para los campos
 
     //Obtenemos las valores que se encuentran en el body
@@ -81,14 +78,14 @@ exports.updatePago = async(req, res)=>{
       return res.status(400).json({ mensaje: "No hay datos por actualizar" });
     }
 
+    values.push(id); // Agregamos el ID al final de los valores
+    
     // Construimos la consulta de manera dinámica
-    values.push(id); // Agregamoe el ID al final de los valores
-
     const sql = `UPDATE pagos SET ${sqlParts.join(", ")} WHERE id = ?`;
     try {
         const [result] = await db.query(sql, values);
 
-        /* Mensajes de errores */
+        /* Mensajes de error */
         if (result.affectedRows === 0) {
             return res.status(404).json({ mensaje: `No encontramos el pago con el ID ${id}` });
         }

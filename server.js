@@ -36,14 +36,25 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'views/index.html'))//root
 })
 //Módulos del sistema (archivos HTML en public)
+
+
+app.get('/clientes', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'views/cliente/indexClientes.html'))
+})
 app.get('/clientes/crear', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'views/cliente/crearCliente.html'))
 })
 
+app.get('/prestamos', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'views/prestamo/indexPrestamos.html'))
+})
 app.get('/prestamos/crear', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'views/prestamo/insertarPrestamo.html'))
 })
 
+app.get('/pagos', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'views/pagos/index.pagos.html'))
+})
 app.get('/pagos/crear', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'views/pagos/insertarPago.html'))
 })

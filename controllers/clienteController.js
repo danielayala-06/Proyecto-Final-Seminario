@@ -65,7 +65,6 @@ exports.updateCliente = async (req, res)=>{
     const {id} = req.params
     const {tipo_documento, doc_identidad, nombres, apellidos, direccion, genero, telefono} = req.body
 
-    //Validación => ES OBLIGATORIO QUE AL MENOS UNO TENGA DATOS
     if ( !tipo_documento && !doc_identidad && !nombres && !apellidos && !direccion && !genero && !telefono) {
         return res.status(400).json({
             mensaje:"Para actualizar debe de ingresar el campo con el valor a actualizar",
